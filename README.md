@@ -1,6 +1,6 @@
 # Orbit - Agent that coordinates the things around your day
 
-A personal agent I'm building in public with Python and LangGraph, inspired by three open-source takes on Dots.
+Orbit is a personal agent I'm building in public with Python and LangGraph, inspired by three open-source takes on Dots.
 
 **Status: planning and architecture.** This repository starts with the design and build plan. There is no runnable agent yet. I'll share working code and progress as the implementation takes shape.
 
