@@ -10,7 +10,14 @@ Follow the build on X: **[@kaushik_holla](https://x.com/kaushik_holla)**.
 
 I want an agent that can take on a small, ongoing responsibility, remember the relevant context, use a limited set of tools, and ask me before making consequential changes.
 
-The first use case is a GitHub repository assistant: check issues, identify what deserves attention, and prepare a daily summary. I'll start with read-only access before adding actions that change external systems.
+I'm planning four everyday workflows:
+
+- **GitHub briefings:** summarize open issues and pull requests, flag items that need attention, and prepare a daily update.
+- **Inbox summaries and cleanup:** summarize unread emails and conversations that need action, highlight important messages, and suggest newsletters or other low-value mail to archive or move to trash after review.
+- **Calendar briefings:** show what is coming up today, flag overlapping meetings, and surface relevant context for preparation.
+- **Follow-up tracking:** identify unanswered messages and commitments in selected conversations, then prepare reminders or draft follow-ups for approval.
+
+These are planned capabilities. I'll build and share them in stages, starting with summaries before introducing external changes.
 
 The goal is to make the agent's behavior understandable: what it read, what it decided, which tools it used, and when it needs my input.
 
@@ -54,7 +61,7 @@ flowchart TD
 | LangGraph workflow | Coordinate model decisions, tool calls, checkpoints, and approval pauses. |
 | Local state store | Persist conversations, task history, and workflow checkpoints. SQLite is the initial choice. |
 | Action gateway | Validate tool names and inputs, enforce permissions, and record execution outcomes. |
-| GitHub integration | Call GitHub's API directly using credentials scoped to the required repositories and operations. |
+| App integrations | Connect directly to GitHub, email, and calendar providers where practical, with access scoped to each workflow. |
 | Background worker | Start scheduled jobs and resume pending work while the service is running. |
 | Model provider | Generate decisions and summaries. The first provider is still to be selected. |
 
@@ -70,24 +77,28 @@ These are architectural inspirations. This project is an independent implementat
 
 ## What I'm working on this weekend
 
-My target is one small end-to-end workflow, rather than every capability of a general personal assistant:
+This weekend I'll build the shared workflow, local state, and permission checks, then start connecting the use cases. My first working targets are GitHub and inbox summaries; calendar briefings and follow-up tracking are on the same roadmap.
 
 - [ ] Set up the Python application and LangGraph workflow.
 - [ ] Connect to one selected GitHub repository with read-only permissions.
-- [ ] Retrieve issues and produce a useful summary.
+- [ ] Retrieve issues and pull requests and produce a useful summary.
+- [ ] Connect to a selected email account for unread-message summaries.
+- [ ] Prototype inbox prioritization and propose cleanup batches for review.
+- [ ] Define the calendar briefing flow and provider integration.
+- [ ] Define follow-up tracking and approval of draft messages.
 - [ ] Persist task progress and results locally.
 - [ ] Show the inputs, tool activity, and final output.
 - [ ] Exercise the permission and approval boundary before introducing external writes.
 
-Scheduled runs, recovery after interruption, a richer interface, and additional integrations will follow once the first workflow works reliably.
+I'll share progress as each flow becomes usable. Cleanup and sending actions will follow after the review process works. Scheduled runs, recovery after interruption, and a richer interface are later milestones.
 
 ## Data and permissions
 
 The design aims to keep conversation state and checkpoints local and use direct app APIs where practical. That reduces the number of intermediary services handling task data.
 
-**Local storage does not mean local-only processing.** If I use a hosted model, the selected instructions, conversation context, and tool results sent to that model will leave the machine. Using a local model would change that data path.
+**Local storage does not mean local-only processing.** If I use a hosted model, the selected instructions, conversation context, email content, calendar details, and tool results sent to that model will leave the machine. Using a local model would change that data path.
 
-The first integration will retrieve only the GitHub data needed for the task. I'll keep credentials out of prompts and logs, use narrow permissions, and require explicit approval for consequential external changes. These are implementation goals, not completed security guarantees.
+Each workflow will retrieve only the app data it needs. I'll keep credentials out of prompts and logs and use narrow permissions. Inbox cleanup will show a proposed batch before anything is archived or moved to trash; follow-up messages will remain drafts until I approve sending them. Permanent email deletion is outside the initial scope. These are implementation goals, not completed security guarantees.
 
 ## Follow the build
 
