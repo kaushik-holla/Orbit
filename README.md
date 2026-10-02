@@ -1,4 +1,4 @@
-# Personal Open Dot
+# Orbit - Agent that coordinates the things around your day
 
 A personal agent I'm building in public with Python and LangGraph, inspired by three open-source takes on Dots.
 
